@@ -3,12 +3,38 @@
 #include <vector>
 #include <cstring>
 #include <cctype>
+#include <string>
+#include <math.h> 
+
+#define M_PI 3.14159265358979323846
 
 using namespace std;
+float area_circle;
+float perimetr_circle;
+float area_tri;
+float perimetr_tri;
+
+struct circle
+{
+	string func_name;
+	float per;
+	float area;
+	circle() {};
+	circle(string _func_name, float _per, float _area): func_name(_func_name), per(_per), area(_area) {};
+};
+
+struct triangle
+{
+	string func_name;
+	float per;
+	float area;
+	triangle() {};
+	triangle(string _func_name, float _per, float _area): func_name(_func_name), per(_per), area(_area) {};
+};
 
 string tr = "triangle", ci = "circle";
 
-bool check_function(string f) // Вывод ошибки в названии фигуры 
+bool check_function(string f) // Р’С‹РІРѕРґ РѕС€РёР±РєРё РІ РЅР°Р·РІР°РЅРёРё С„РёРіСѓСЂС‹
 {
 	if(f == ci || f == tr) return true;
 	else
@@ -18,7 +44,7 @@ bool check_function(string f) // Вывод ошибки в названии фигуры
 	}
 }
 
-bool is_number(string n, int j) // Ошибка, если что-то другое вместо цифры
+bool is_number(string n, int j) // РћС€РёР±РєР°, РµСЃР»Рё С‡С‚Рѕ-С‚Рѕ РґСЂСѓРіРѕРµ РІРјРµСЃС‚Рѕ С†РёС„СЂС‹
 {
 	for(int i=0;i<n.size();i++)
 	{
@@ -31,47 +57,101 @@ bool is_number(string n, int j) // Ошибка, если что-то другое вместо цифры
 	return true;
 }
 
-string findnumber(string str, int &j) // ищем число в строке
+string findnumber(string str, int &j) // РС‰РµРј С‡РёСЃР»Р° РІ СЃС‚СЂРѕРєРµ
 {
 	string num = "";
-	while(str[j] != ' ' && str[j] != ',' && str[j] != ')') //проверка цифр
+	while(str[j] != ' ' && str[j] != ',' && str[j] != ')') //РїСЂРѕРІРµСЂРєР° РЅР° С†РёС„СЂС‹
 	{
 		num += str[j];
 		j++;
 		if(j >= str.size()) break;
 	}
+	if(str[j] == ',' && j < str.size()) j++;
 	return num;
 }
 
-void Circle(string str, int &j) // рассчет круга
+float Perimetr_Tri (float a, float b, float c)
 {
-	string num1 = findnumber(str, j);
-	if(!is_number(num1, j)) return;
-	if(j < str.size()) j++;
-	else return;
-	string num2 = findnumber(str, j);
-	if(!is_number(num2, j)) return;
-	if(j+2 < str.size()) j+=2;
-	else return;
-	string num3 = findnumber(str,j);
-	if(!is_number(num3, j)) return;
-	cout << num1 << " " << num2 << " " << num3;
+	return a+b+c;
 }
 
-void Triangle(string str, int &j) // рассчет треугольника
+float Dlina_Storony (float x1, float y1, float x2, float y2)
 {
-	return;
+	float dlina_storony;
+	dlina_storony = sqrt(pow(x1-x2, 2) + pow(y1-y2, 2));
+	return dlina_storony;
 }
 
-int main() //база
+circle Circle(string str, int &j) // Р¤СѓРЅРєС†РёСЏ РєСЂСѓРіР°. Р’С‹С‚Р°СЃРєРёРІР°РµРј С‡РёСЃР»Р°.
+{
+	vector<string> nums;
+	for(int i = 0; i<3;i++)
+	{
+		string tmp = findnumber(str,j);
+		if(!is_number(tmp, j)) exit(1); 
+		nums.push_back(tmp);
+		if(j < str.size()) j++;
+	}
+
+	float x_circle = stof(nums[0]);
+	float y_circle = stof(nums[1]);
+	float rad_circle = stof(nums[2]);
+	float perimetr_circle;
+	perimetr_circle = M_PI * rad_circle * 2;
+	float area_circle;
+	area_circle = M_PI * pow(rad_circle, 2);
+	return circle(str,perimetr_circle,area_circle);
+}
+
+triangle Triangle(string str, int &j) // Р¤СѓРЅРєС†РёСЏ С‚СЂРµСѓРіРѕР»СЊРЅРёРєР°
+{
+	vector<string> nums;
+	for(int i = 0; i<8;i++)
+	{
+		string tmp = findnumber(str,j);
+		if(!is_number(tmp, j)) exit(1); 
+		nums.push_back(tmp);
+		if(j < str.size()) j++;
+	}
+	vector<float> x;
+	vector<float> y;
+	for(int i=0;i<nums.size();i++)
+	{
+		if(i%2) y.push_back(stof(nums[i]));
+		else x.push_back(stof(nums[i]));
+	}
+	float a = Dlina_Storony (x[0], y[0], x[1], y[1]);
+	float b = Dlina_Storony (x[1], y[1], x[2], y[2]);
+	float c = Dlina_Storony (x[2], y[2], x[0], y[0]);
+	float half_per = (Perimetr_Tri (a, b, c)) / 2;
+	perimetr_tri = Perimetr_Tri (a, b, c);
+	area_tri = sqrt(half_per*(half_per - a)*(half_per-b)*(half_per-c));
+	return triangle(str, perimetr_tri, area_tri);
+}
+
+void print_circle(circle c, int i)
+{
+	cout << i + 1 << ". " <<c.func_name << endl;
+	cout <<"\t perimetr = " << c.per << endl;
+	cout <<"\t area = " << c.area << endl;
+}
+
+void print_tri(triangle c, int i)
+{
+	cout << i + 1 << ". " << c.func_name << endl;
+	cout <<"\t perimetr = " << c.per << endl;
+	cout <<"\t area = " << c.area << endl;
+}
+
+int main() //пїЅпїЅпїЅпїЅ
 {
 	ifstream fin("input.txt");
 	vector<string> str;
 	while(!fin.eof())
 	{
-		string tmp; // временная переменная, куда считываем строку
-		getline(fin,tmp); //считывать до первого пробела
-		str.push_back(tmp); //значение строки в файл
+		string tmp; // РЎС‡РёС‚С‹РІР°РµРј СЃС‚СЂРѕРєСѓ
+		getline(fin,tmp); //РЎС‡РёС‚С‹РІР°РµРј РґРѕ РїРµСЂРІРѕРіРѕ РїСЂРѕР±РµР»Р°
+		str.push_back(tmp); //Р—РЅР°С‡РµРЅРёРµ СЃС‚СЂРѕРєСѓ РІ С„Р°Р№Р»
 	}
 	fin.close();
 	for(int i=0;i<str.size();i++)
@@ -80,13 +160,15 @@ int main() //база
         {
             str[i].replace(str[i].find("  ", 0), 2, " ");
         }
-		cout << str[i] << endl; //вывод строк
+		cout << str[i] << endl; //Р’С‹РІРѕРґ СЃС‚СЂРѕРєРё
 	}
+	circle c;
+	triangle tri;
 	for(int i=0; i<str.size();i++)
 	{
 		int j = 0, bal = 0;
 		string func = "";
-		while(str[i][j] != '(' && str[i][j] != ')') //проверка названия функции + регистр
+		while(str[i][j] != '(' && str[i][j] != ')') // РџСЂРѕРІРµСЂРєР° РЅР°Р·РІР°РЅРёСЏ С„РёРіСѓСЂС‹ + СЂРµРіРёСЃС‚СЂ
 		{
 			func += tolower(str[i][j]);
 			j++;
@@ -94,7 +176,7 @@ int main() //база
 		}
 		if(str[i][j] == '(') bal++;
 		if(!check_function(func)) break;
-		if(str[i][j] == ')') // проверка на первую скобку (
+		if(str[i][j] == ')') // РџСЂРѕРІРµСЂРєР° РЅР° РїРµСЂРІСѓСЋ СЃРєРѕР±РєСѓ(
 		{
 			cout << "Error at column " << j+1 <<": expected '('";
 			break;
@@ -102,14 +184,18 @@ int main() //база
 		if(j < str[i].size()) j++;
 		else break;
 		if(str[i][j] == '(') bal++;
-		if(func == tr && str[i][j] != '(') //проверка на вторую строку, если треугольник
+		if(func == tr && str[i][j] != '(') //РџСЂРѕРІРµСЂРєР° РЅР° РІС‚РѕСЂСѓСЋ СЃРєРѕР±РєСѓ, РµСЃР»Рё С‚СЂРµСѓРіРѕР»СЊРЅРёРє
 		{
 			cout << "Error at column " << j+1 <<": expected '('";
 			break;			
 		}
-		// проверка циферий
-		if(func == ci) Circle(str[i],j);
-		if(func == tr) Triangle(str[i],j);
+		//Р¦РёС„СЂС‹
+		if(func == ci) c = Circle(str[i],j);
+		if(func == tr) 
+		{
+			if(j < str[i].size()) j++;
+			tri = Triangle(str[i],j);
+		}
 		while(str[i][j] == ')')
 		{
 			if(str[i][j] == ')' && bal > 0) bal--;
@@ -119,7 +205,8 @@ int main() //база
 		{
 			cout << "\nError at column " << j+1 <<": unexpected token";
 		}
-		break;
+		if(func == ci) print_circle(c,i);
+		if(func == tr) print_tri(tri,i);
 	}
 	return 0;
 }
