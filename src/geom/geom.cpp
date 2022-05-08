@@ -7,6 +7,7 @@
 #include <libgeom/dlina_storony.h>
 #include <libgeom/figures.h>
 #include <libgeom/findnumber.h>
+#include <libgeom/intersections.h>
 #include <libgeom/isdigit.h>
 #include <libgeom/perimetr_tri.h>
 #include <libgeom/print_circle.h>
@@ -48,6 +49,9 @@ int main() //����
     }
     circle c;
     triangle tri;
+    vector<circle> circles;
+    vector<triangle> triangles;
+    vector<string> figures;
     for (int i = 0; i < N; i++) {
         int j = 0, bal = 0;
         string func = "";
@@ -82,12 +86,16 @@ int main() //����
             break;
         }
         //Цифры
-        if (func == ci)
+        if (func == ci) {
             c = Circle(str[i], j);
+            c.position = to_string(i+1);
+            circles.push_back(c);
+        }
         if (func == tr) {
             if (j < K)
                 j++;
             tri = Triangle(str[i], j);
+            triangles.push_back(tri);
         }
         while (str[i][j] == ')') {
             if (str[i][j] == ')' && bal > 0)
@@ -97,10 +105,14 @@ int main() //����
         if (++j < K) {
             cout << "\nError at column " << j + 1 << ": unexpected token";
         }
-        if (func == ci)
-            print_circle(c, i);
-        if (func == tr)
-            print_tri(tri, i);
+        figures.push_back(func);
+    }
+    findIntersections(circles);
+    for (int i = 0, k = 0, f = 0; i < N; i++) {
+        if (figures[i] == ci)
+            print_circle(circles[k++], i);
+        if (figures[i] == tr)
+            print_tri(triangles[f++], i);
     }
     return 0;
 }

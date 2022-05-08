@@ -24,6 +24,6 @@ circle Circle(string str, int& j) // Функция круга. Вытаскив
     perimetr_circle = M_PI * rad_circle * 2;
     float area_circle;
     area_circle = M_PI * pow(rad_circle, 2);
-    return circle(str, perimetr_circle, area_circle);
+    Point center(stof(nums[0]), stof(nums[1]));
+    return circle(center, str, perimetr_circle, area_circle, rad_circle);
 }
-
