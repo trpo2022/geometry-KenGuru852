@@ -1,3 +1,3 @@
 #pragma once
 
-float Perimetr_Tri (float, float, float);
+float Perimetr_Tri(float, float, float);
