@@ -15,4 +15,3 @@ void print_tri(triangle c, int i)
     std::cout << "\t perimetr = " << c.per << std::endl;
     std::cout << "\t area = " << c.area << std::endl;
 }
-

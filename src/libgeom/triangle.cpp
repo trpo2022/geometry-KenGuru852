@@ -43,4 +43,4 @@ triangle Triangle(string str, int& j) // Функция треугольника
     float area_tri
             = sqrt(half_per * (half_per - a) * (half_per - b) * (half_per - c));
     return triangle(str, perimetr_tri, area_tri);
-
+}
