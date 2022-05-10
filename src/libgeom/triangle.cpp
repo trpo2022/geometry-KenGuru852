@@ -12,7 +12,6 @@
 #include <string>
 #include <vector>
 
-#define M_PI 3.14159265358979323846
 using namespace std;
 
 triangle Triangle(string str, int& j) // Функция треугольника

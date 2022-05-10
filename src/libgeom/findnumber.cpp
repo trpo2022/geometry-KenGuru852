@@ -7,8 +7,6 @@
 #include <string>
 #include <vector>
 
-#define M_PI 3.14159265358979323846
-
 std::string findnumber(std::string str, int& j) // Ищем числа в строке
 {
     std::string num = "";

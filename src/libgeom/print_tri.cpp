@@ -7,8 +7,6 @@
 #include <string>
 #include <vector>
 
-#define M_PI 3.14159265358979323846
-
 void print_tri(triangle c, int i)
 {
     std::cout << i + 1 << ". " << c.func_name << std::endl;

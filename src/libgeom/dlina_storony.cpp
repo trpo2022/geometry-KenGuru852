@@ -8,8 +8,6 @@
 #include <string>
 #include <vector>
 
-#define M_PI 3.14159265358979323846
-
 float Dlina_Storony(float x1, float y1, float x2, float y2)
 {
     float dlina_storony;
