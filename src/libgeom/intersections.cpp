@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 using namespace std;
-void findIntersections(vector<circle>& arr)
+bool findIntersections(vector<circle>& arr)
 {
     int N = arr.size();
     for (int i = 0; i < N - 1; i++) {
@@ -19,4 +19,9 @@ void findIntersections(vector<circle>& arr)
             }
         }
     }
+    int n = 0;
+    for (int i = 0; i < N; i++) {
+        n += arr[i].intersections.size();
+    }
+    return n > 0;
 }
